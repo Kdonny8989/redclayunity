@@ -1,0 +1,14 @@
+{
+  "name": "RedClay.Play",
+  "rootNamespace": "",
+  "references": ["RedClay.Port", "Unity.InputSystem"],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

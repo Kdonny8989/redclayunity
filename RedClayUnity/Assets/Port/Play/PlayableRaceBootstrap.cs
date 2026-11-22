@@ -6,7 +6,7 @@ public static class PlayableRaceBootstrap
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Spawn()
     {
-        if (Object.FindFirstObjectByType<PlayableRace>() != null) return;
+        if (Object.FindAnyObjectByType<PlayableRace>() != null) return;
         new GameObject("PlayableRace").AddComponent<PlayableRace>();
     }
 }

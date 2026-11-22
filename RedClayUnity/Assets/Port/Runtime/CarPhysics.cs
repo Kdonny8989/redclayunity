@@ -33,6 +33,11 @@ public sealed class CarState
     public double PushT;          // bump-draft push time left (seconds)
     public double Skill = 1;      // driver skill (AI): scales the corner speed it can carry
     public double Margin = 1;     // driver persona: how much grip margin the driver leaves in hand
+    // AI driver state
+    public double LaneOff, LaneNudge, DodgeT, DodgeLane, StuckT, Recover, Bobble, BobbleDir;
+    public double Follow = 30;    // persona: how close the driver will follow a slower car
+    public double Twitch;         // persona: how much the wheel wanders
+    public bool Grudge, Team;
     public int Pit;
     public CarSpec Spec;
 }

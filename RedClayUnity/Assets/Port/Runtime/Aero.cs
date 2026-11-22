@@ -7,7 +7,7 @@ public static class Aero
 {
     static double Clamp(double v, double a, double b) => Math.Max(a, Math.Min(b, v));
 
-    static bool AeroOn(CarState c, PhysicsEnv env)
+    public static bool AeroOn(CarState c, PhysicsEnv env)
     {
         var P = c.Spec ?? (c.Spec = CarPhysics.SpecFor(env));
         return P.DfFrac > 0;

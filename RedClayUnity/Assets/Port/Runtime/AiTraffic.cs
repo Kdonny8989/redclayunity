@@ -1,6 +1,6 @@
 // Port of driveAI() in src/core.js: one AI car's decision for a frame, including the traffic handling (dodging slow or
 // sideways cars, following, and staying clear of cars alongside). The random source is passed in so tests are repeatable.
-// The crossing caution and the pack are in AiPack.cs. Not yet: the derby.
+// The crossing caution and the pack are in AiPack.cs; the derby is in AiDerby.cs.
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +11,8 @@ public static class AiTraffic
     // one AI decision. inRace: whether the race is running (the wheel only wanders then).
     public static void Drive(CarState c, IList<CarState> cars, double dt, PhysicsEnv env, RaceContext ctx)
     {
+        // the derby: hunt, don't race
+        if (env.Derby && ctx.Stage == "feature") { AiDerby.Drive(c, cars, dt, env, ctx); return; }
         double W = env.Track.W, TOTAL = env.Track.Total;
         var rnd = ctx.Rnd;
         double gameTime = ctx.Time;

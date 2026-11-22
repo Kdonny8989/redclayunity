@@ -11,6 +11,7 @@ public sealed class RaceContext
     public int Laps = 8;
     public bool InRace = true;
     public Func<double> Rnd = () => 0.3;
+    public CarState Player;      // the player's car, for the derby's chance to target you
 }
 
 public static class AiPack

@@ -17,6 +17,7 @@ public sealed class PhysicsEnv
     public bool Rain;                    // wet track: worn tyres lose grip
     public bool AssistOff;               // the player's stability assist is switched off
     public bool Fig8;                    // the figure-eight: its two halves cross in the middle
+    public bool Derby;                   // the demolition derby arena
     public double GrooveCenter = -24;    // set by SetGroove
     public double TrackEvo;              // how far the track has evolved (dries out or rubbers in)
     public bool Red;                     // red flag: the cars are held
@@ -44,6 +45,11 @@ public sealed class CarState
     public double CheckT, RippleAt, PackBrake;
     public bool CheckArmed, Desperate;
     public CarState RippleFrom;
+
+    // derby state
+    public int Num;
+    public double RunT, BackT, DtgtT;
+    public CarState Dtgt;
     public int Pit;
     public CarSpec Spec;
 }

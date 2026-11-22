@@ -16,6 +16,7 @@ public sealed class PhysicsEnv
     public double DirtRearMu = 1;        // dirt state: rear traction (1 = normal clay)
     public bool Rain;                    // wet track: worn tyres lose grip
     public bool AssistOff;               // the player's stability assist is switched off
+    public bool Fig8;                    // the figure-eight: its two halves cross in the middle
     public double GrooveCenter = -24;    // set by SetGroove
     public double TrackEvo;              // how far the track has evolved (dries out or rubbers in)
     public bool Red;                     // red flag: the cars are held
@@ -38,6 +39,11 @@ public sealed class CarState
     public double Follow = 30;    // persona: how close the driver will follow a slower car
     public double Twitch;         // persona: how much the wheel wanders
     public bool Grudge, Team;
+
+    // pack state (downforce classes)
+    public double CheckT, RippleAt, PackBrake;
+    public bool CheckArmed, Desperate;
+    public CarState RippleFrom;
     public int Pit;
     public CarSpec Spec;
 }

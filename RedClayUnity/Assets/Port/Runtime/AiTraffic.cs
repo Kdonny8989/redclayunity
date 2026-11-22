@@ -1,7 +1,6 @@
 // Port of driveAI() in src/core.js: one AI car's decision for a frame, including the traffic handling (dodging slow or
 // sideways cars, following, and staying clear of cars alongside). The random source is passed in so tests are repeatable.
-// Not in this file yet: the derby, the crossing caution (crossingCaution is passed in as a value), and the pack's
-// accordion for downforce cars, which throws until it is ported rather than silently ignoring it.
+// The crossing caution and the pack are in AiPack.cs. Not yet: the derby.
 using System;
 using System.Collections.Generic;
 
@@ -10,10 +9,12 @@ public static class AiTraffic
     static double Clamp(double v, double a, double b) => Math.Max(a, Math.Min(b, v));
 
     // one AI decision. inRace: whether the race is running (the wheel only wanders then).
-    public static void Drive(CarState c, IList<CarState> cars, double dt, PhysicsEnv env,
-                             Func<double> rnd, double gameTime, bool inRace, double crossingCap = double.PositiveInfinity)
+    public static void Drive(CarState c, IList<CarState> cars, double dt, PhysicsEnv env, RaceContext ctx)
     {
         double W = env.Track.W, TOTAL = env.Track.Total;
+        var rnd = ctx.Rnd;
+        double gameTime = ctx.Time;
+        bool inRace = ctx.InRace;
         // recovering from a spin: back up with the wheel turned the other way, then drive off
         double h0 = env.Track.G.H[env.Track.IdxOf(c.S)];
         double err = TrackGeometry.WrapAngle(h0 - c.H);
@@ -78,10 +79,9 @@ public static class AiTraffic
         }
         AiDriver.Steer(c, env, lane, 46 + Math.Max(0, c.VF * 0.16));
         if (c.Twitch != 0 && inRace) c.SteerTarget = Clamp(c.SteerTarget + (rnd() - 0.5) * c.Twitch, -1, 1);
-        target = Math.Min(target, crossingCap);
+        target = Math.Min(target, AiPack.CrossingCaution(c, cars, env));
         target = Math.Min(target, AiDriver.CornerLimit(c, env, lane));
-        if (Aero.AeroOn(c, env))
-            throw new NotImplementedException("The pack's accordion for downforce cars is not ported yet (packTarget in src/pack.js).");
+        target = AiPack.PackTarget(c, cars, target, dt, env, ctx);
 
         c.Throttle = c.VF < target ? 1 : 0;
         if (Math.Abs(c.Beta) > 0.22) c.Throttle = Math.Abs(c.Beta) > 0.5 ? 0 : 0.5;   // sideways: ease off and let the tyres grab
@@ -95,5 +95,13 @@ public static class AiTraffic
         bool inCorner = Math.Abs(env.Track.CurvAt(c.S)) > 1.0 / 1200;
         if (c.Spin == 0 && inCorner && c.VF > 120 && env.Surface == "dirt" && rnd() < Math.Max(0, 1 - c.Skill) * 0.02 * dt)
             c.R = c.R + (rnd() < 0.5 ? -1 : 1) * 0.9;
+    }
+
+    // one frame for an AI car, as the game runs it: the decision, then the pack's hard stop (src/logic.js)
+    public static void Tick(CarState c, IList<CarState> cars, double dt, PhysicsEnv env, RaceContext ctx)
+    {
+        Drive(c, cars, dt, env, ctx);
+        AiPack.PackPost(c, cars, env);
+        if (c.PackBrake != 0) { c.Brake = 1; c.Throttle = 0; }
     }
 }

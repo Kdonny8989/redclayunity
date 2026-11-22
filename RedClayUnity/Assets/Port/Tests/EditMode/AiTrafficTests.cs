@@ -56,7 +56,7 @@ public class AiTrafficTests
             }
             for (int k = 0; k < cars.Count; k++)
             {
-                AiTraffic.Drive(cars[k], cars, 1.0 / 120.0, env, () => 0.3, 10, true);
+                AiTraffic.Drive(cars[k], cars, 1.0 / 120.0, env, new RaceContext { Time = 10, Stage = "race", Laps = 8, InRace = true, Rnd = () => 0.3 });
                 var o = s.outputs[k];
                 var c = cars[k];
                 bool same = Math.Abs(c.SteerTarget - o.steerTarget) <= Tol && Math.Abs(c.Throttle - o.throttle) <= Tol

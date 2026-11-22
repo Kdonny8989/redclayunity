@@ -12,6 +12,32 @@ public sealed class TrackSpace
 
     public TrackSpace(TrackGeometry g, double w) { G = g; W = w; }
 
+    System.Collections.Generic.List<double[]> crossings;
+
+    // src/events.js crossings(): pairs of distances around the lap that meet at the same spot (the figure-eight only)
+    public System.Collections.Generic.List<double[]> Crossings(bool fig8)
+    {
+        if (crossings != null) return crossings;
+        var outList = new System.Collections.Generic.List<double[]>();
+        var g = G;
+        if (fig8)
+        {
+            bool has = false;
+            double best = 0, bestA = 0, bestB = 0;
+            for (int i = 0; i < g.N; i += 2)
+                for (int j = i + (int)Math.Floor(g.N * 0.25); j < g.N; j += 2)
+                {
+                    if (Math.Abs(i - j) > g.N * 0.75) continue;
+                    double dx = g.X[i] - g.X[j], dy = g.Y[i] - g.Y[j];
+                    double d = Math.Sqrt(dx * dx + dy * dy);
+                    if (d < W && (!has || d < best)) { has = true; best = d; bestA = i * g.Ds; bestB = j * g.Ds; }
+                }
+            if (has) outList.Add(new[] { bestA, bestB });
+        }
+        crossings = outList;
+        return crossings;
+    }
+
     public double Total => G.Total;
     public double Ds => G.Ds;
     public int N => G.N;

@@ -29,7 +29,10 @@ public sealed class CarState
     public double Tw, TwMul = 1, Toe, RearGrip = 1;
     public double Draft, SkillDraft, RearHit, DirtyAir, TireLife, SkillTire;
     public double Spin, Bump, S, LastS, Lat, Prog, Beta, Slip, VF;
-    public bool SpinKick, Out, IsPlayer, Hired = true;
+    public bool SpinKick, Out, IsPlayer, Hired = true, Finished;
+    public double PushT;          // bump-draft push time left (seconds)
+    public double Skill = 1;      // driver skill (AI): scales the corner speed it can carry
+    public double Margin = 1;     // driver persona: how much grip margin the driver leaves in hand
     public int Pit;
     public CarSpec Spec;
 }

@@ -46,6 +46,11 @@ public sealed class CarState
     public bool CheckArmed, Desperate;
     public CarState RippleFrom;
 
+    // damage state
+    public double Dmg, BaseMax, BaseGrip, PowerCut = 1, DmgResist, HitT;
+    public double ZoneFront, ZoneRear, ZoneLeft, ZoneRight;
+    public double? BaseTw;
+
     // derby state
     public int Num;
     public double RunT, BackT, DtgtT;
